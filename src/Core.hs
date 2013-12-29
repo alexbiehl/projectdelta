@@ -21,7 +21,7 @@ import Data.SafeCopy
 import Data.Maybe
 import Data.Monoid
 
-import Control.Exception
+import Control.Exception (bracket)
 import Control.Applicative
 import Control.Monad.Reader
 import Control.Monad.State hiding (state)
