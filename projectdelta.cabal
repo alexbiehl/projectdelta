@@ -31,7 +31,8 @@ executable projectdelta
     mtl ==2.1.*,
     scotty ==0.6.*,
     aeson ==0.6.2.1,
-    transformers ==0.3.0.0
+    transformers ==0.3.0.0,
+    http-types ==0.8.3
 
 
   hs-source-dirs: src

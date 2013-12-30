@@ -8,6 +8,7 @@ import Control.Monad.Trans
 import Web.Scotty.Trans
 import Data.Aeson.Types
 import Data.Text.Lazy (Text)
+import Network.HTTP.Types.Status
 
 import qualified Core
 
@@ -22,8 +23,12 @@ userPermissions :: ProjectDeltaM ()
 userPermissions = do
   email <- param "email"
   permissions <- lift $ Core.userPermissions email
-  let jsonPermissions = emptyArray
-  json $ object ["result" .= jsonPermissions]
+  case permissions of
+    Just perms -> do
+      let jsonPermissions = emptyArray
+      json $ object ["result" .= jsonPermissions]
+    Nothing -> do
+      status notFound404
 
 runServer :: Core.CoreEnv -> IO ()
 runServer env = scottyT 8080 runCore runCore $ do
