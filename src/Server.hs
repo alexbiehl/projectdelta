@@ -13,8 +13,8 @@ import qualified Core
 
 type ProjectDeltaM = ActionT Text Core.CoreM
 
-userEmails :: ProjectDeltaM ()
-userEmails = do
+users :: ProjectDeltaM ()
+users = do
   users <- lift Core.users
   json $ object ["result" .= users]
 
@@ -27,7 +27,7 @@ userPermissions = do
 
 runServer :: Core.CoreEnv -> IO ()
 runServer env = scottyT 8080 runCore runCore $ do
-    get "/users" userEmails
+    get "/users" users
     get "/users/:email/permissions" userPermissions
   where
     runCore = Core.runCoreM env
