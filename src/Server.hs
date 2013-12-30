@@ -11,14 +11,14 @@ import Data.Text.Lazy (Text)
 
 import qualified Core
 
-type ProjectDeltaAction = ActionT Text Core.CoreM
+type ProjectDeltaM = ActionT Text Core.CoreM
 
-userEmails :: ProjectDeltaAction ()
+userEmails :: ProjectDeltaM ()
 userEmails = do
   users <- lift Core.users
   json $ object ["result" .= users]
 
-userPermissions :: ProjectDeltaAction ()
+userPermissions :: ProjectDeltaM ()
 userPermissions = do
   email <- param "email"
   permissions <- lift $ Core.userPermissions email
