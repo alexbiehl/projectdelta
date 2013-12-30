@@ -6,6 +6,7 @@ module Group(
     add'',
     remove,
     permissions,
+    permissions',
     assignPermission,
     revokePermission,
     groupIdsToList
@@ -35,8 +36,12 @@ add' gid = add gid HS.empty
 remove :: GroupId -> Groups -> Groups
 remove gid = Groups . HM.delete gid . allGroups
 
-permissions :: GroupId -> Groups -> Maybe Permissions
-permissions gid = HM.lookup gid . allGroups
+permissions' :: GroupIds -> Groups -> Permissions
+permissions' gids grps =
+  HS.unions $ map (flip permissions grps) $ groupIdsToList gids
+
+permissions :: GroupId -> Groups -> Permissions
+permissions gid = HM.findWithDefault HS.empty gid . allGroups
 
 assignPermission :: GroupId -> Permission -> Groups -> Groups
 assignPermission gid perm = add gid (HS.singleton perm)

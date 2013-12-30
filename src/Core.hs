@@ -50,10 +50,7 @@ runCoreM env m = runReaderT (unCoreM m) env
 lookupPermissions :: Email -> CoreState -> Maybe Permissions
 lookupPermissions email state = do
     groups <- User.groups email (csUsers state)
-    let perms = (flip Group.permissions allGroups) <$> Group.groupIdsToList groups
-    return $ mconcat $ catMaybes perms
-  where
-    allGroups = csGroups state
+    return $ Group.permissions' groups (csGroups state)
 
 users' :: Query CoreState [(Email, GroupIds)]
 users' = User.users . csUsers <$> ask
