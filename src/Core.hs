@@ -47,9 +47,6 @@ newtype CoreM a = CoreM { unCoreM :: ReaderT CoreEnv IO a }
 runCoreM :: CoreEnv -> CoreM a -> IO a
 runCoreM env m = runReaderT (unCoreM m) env
 
-initialState :: CoreState
-initialState = CoreState User.empty Group.empty
-
 lookupPermissions :: Email -> CoreState -> Maybe Permissions
 lookupPermissions email state = do
     groups <- User.groups email (csUsers state)
@@ -86,6 +83,9 @@ userPermissions :: Email -> CoreM (Maybe Permissions)
 userPermissions email = do
   state <- coreState <$> ask
   liftIO $ query state (UserPermissions' email)
+
+initialState :: CoreState
+initialState = CoreState User.empty Group.empty
 
 mkCoreEnv :: IO CoreEnv
 mkCoreEnv = do
