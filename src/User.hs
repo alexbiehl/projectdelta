@@ -34,9 +34,7 @@ delete :: Email -> Users -> Users
 delete em = Users . HM.delete em . allUsers
 
 assignGroup :: Email -> GroupId -> Users -> Users
-assignGroup em gid = Users . HM.adjust adjust em . allUsers
-  where
-    adjust (User gids) = User (HS.insert gid gids)
+assignGroup em gid = assignGroups em (HS.singleton gid)
 
 assignGroups :: Email -> GroupIds -> Users -> Users
 assignGroups em gids = Users . HM.adjust adjust em . allUsers
