@@ -31,8 +31,8 @@ import qualified User
 import qualified Group
 
 data CoreState = CoreState {
-    csUsers  :: Users
-  , csGroups :: Groups
+    csUsers  :: !Users
+  , csGroups :: !Groups
   } deriving (Typeable, Show)
 
 deriveSafeCopy 0 'base ''CoreState
@@ -88,9 +88,7 @@ initialState :: CoreState
 initialState = CoreState User.empty Group.empty
 
 mkCoreEnv :: IO CoreEnv
-mkCoreEnv = do
-  acid <- openLocalState initialState
-  return $ CoreEnv acid
+mkCoreEnv = openLocalState initialState >>= return . CoreEnv
 
 closeCoreEnv :: CoreEnv -> IO ()
 closeCoreEnv = closeAcidState . coreState
