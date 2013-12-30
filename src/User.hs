@@ -2,6 +2,7 @@
 module User(
     empty,
     emails,
+    users,
     add,
     add',
     delete,
@@ -26,6 +27,11 @@ add' em gid users = assignGroups em gid (add em users)
 
 emails :: Users -> [Email]
 emails = HM.keys . allUsers
+
+users :: Users -> [(Email, GroupIds)]
+users = map f . HM.toList . allUsers
+  where
+    f (email, user) = (email, userGroups user)
 
 groups :: Email -> Users -> Maybe GroupIds
 groups em usrs = fmap userGroups $ HM.lookup em (allUsers usrs)

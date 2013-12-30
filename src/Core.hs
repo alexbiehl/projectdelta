@@ -56,7 +56,7 @@ lookupPermissions email state = do
     allGroups = csGroups state
 
 users' :: Query CoreState [(Email, GroupIds)]
-users' = undefined
+users' = User.users . csUsers <$> ask
 
 userPermissions' :: Email -> Query CoreState (Maybe Permissions)
 userPermissions' email = lookupPermissions email <$> ask
